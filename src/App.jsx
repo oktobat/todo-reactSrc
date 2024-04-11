@@ -16,31 +16,44 @@ const App = () => {
       const todo = { id:id.current, text:value, checked:false}
       id.current = id.current + 1;
       console.log(id.current)
-      // setTodos(todos.concat(todo))
-      setTodos([...todos, todo])
-      localStorage.todos = JSON.stringify([...todos, todo])
-      localStorage.id = JSON.stringify(id.current)
-      console.log(todos)
+      setTodos(todos=>{
+        const updateTodos = [...todos, todo]  // todos.concat(todo)
+        localStorage.todos = JSON.stringify(updateTodos)
+        localStorage.id = id.current
+        return updateTodos
+      })
     }, [todos])
 
   const onToggle = useCallback((id) => {
-      setTodos(todos.map(item => item.id === id ? {...item, checked: !item.checked} : item))
-      localStorage.todos = JSON.stringify(todos.map(item => item.id === id ? {...item, checked: !item.checked} : item))
+      setTodos(todos=>{
+        const updateTodos = todos.map(item => item.id === id ? {...item, checked: !item.checked} : item)
+        localStorage.todos = JSON.stringify(updateTodos)
+        return updateTodos
+      })
   }, [todos])
 
   const onRemove = useCallback((id)=>{
-      setTodos(todos.filter(item=>item.id!==id))
-      localStorage.todos = JSON.stringify(todos.filter(item=>item.id!==id))
+      setTodos(todos=>{
+        const updateTodos = todos.filter(item=>item.id!==id)
+        localStorage.todos = JSON.stringify(updateTodos)
+        return updateTodos
+      })
   }, [todos])
 
   const onFinishRemove = useCallback(()=>{
-    setTodos(todos.filter(item=>!item.checked))
-    localStorage.todos = JSON.stringify(todos.filter(item=>!item.checked))
+    setTodos(todos=>{
+      const updateTodos = todos.filter(item=>!item.checked)
+      localStorage.todos = JSON.stringify(updateTodos)
+      return updateTodos
+    })
   }, [todos])
 
   const allRemove = useCallback(()=>{
-    setTodos([])
-    localStorage.todos = JSON.stringify([])
+    setTodos(()=>{
+      const updateTodos = []
+      localStorage.todos = JSON.stringify(updateTodos)
+      return updateTodos
+    })
   }, [todos])
 
   useEffect(()=>{
