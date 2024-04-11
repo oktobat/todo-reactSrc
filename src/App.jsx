@@ -3,6 +3,7 @@ import TodoHeader from './TodoHeader'
 import TodoTemplate from './TodoTemplate';
 import TodoInsert from './TodoInsert'
 import TodoList from './TodoList'
+import TodoFooter from './TodoFooter'
 
 const App = () => {
   const id = useRef(1);
@@ -23,13 +24,23 @@ const App = () => {
     }, [todos])
 
   const onToggle = useCallback((id) => {
-      setTodos(todos.map(item => item.id == id ? {...item, checked:!item.checked} : item))
-      localStorage.todos = JSON.stringify(todos.map(item => item.id == id ? {...item, checked:!item.checked} : item))
+      setTodos(todos.map(item => item.id === id ? {...item, checked: !item.checked} : item))
+      localStorage.todos = JSON.stringify(todos.map(item => item.id === id ? {...item, checked: !item.checked} : item))
   }, [todos])
 
   const onRemove = useCallback((id)=>{
       setTodos(todos.filter(item=>item.id!==id))
       localStorage.todos = JSON.stringify(todos.filter(item=>item.id!==id))
+  }, [todos])
+
+  const onFinishRemove = useCallback(()=>{
+    setTodos(todos.filter(item=>!item.checked))
+    localStorage.todos = JSON.stringify(todos.filter(item=>!item.checked))
+  }, [todos])
+
+  const allRemove = useCallback(()=>{
+    setTodos([])
+    localStorage.todos = JSON.stringify([])
   }, [todos])
 
   useEffect(()=>{
@@ -39,13 +50,14 @@ const App = () => {
       setTodos(JSON.parse(localtodos))
       id.current = JSON.parse(localid)
     }
-  }, [])
+}, [])
 
   return (
     <TodoTemplate>
-      <TodoHeader />
+      <TodoHeader todos={todos} />
       <TodoInsert onInsert={onInsert} />
       <TodoList todos={todos} onToggle={onToggle} onRemove={onRemove} />
+      <TodoFooter onFinishRemove={onFinishRemove} allRemove={allRemove} />
     </TodoTemplate>
   );
 };

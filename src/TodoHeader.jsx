@@ -13,10 +13,10 @@ const TodoHeaderBlock = styled.div`
     }
 `
 
-const TodoHeader = () => {
+const TodoHeader = ({todos}) => {
     return (
         <TodoHeaderBlock>
-            <h1>일정관리 앱</h1>
+            <h1>일정관리 앱 ({todos.filter(item=>item.checked).length}건/{todos.length}건) </h1>
         </TodoHeaderBlock>
     );
 };
